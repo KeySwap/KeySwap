@@ -7,7 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5E5B083D1C2BA6D2000C7F12 /* Weather App Design in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B083B1C2BA686000C7F12 /* Weather App Design */; };
+		5E5B084B1C2BA896000C7F12 /* All with Sun Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B083E1C2BA896000C7F12 /* All with Sun Placeholder.png */; };
+		5E5B084C1C2BA896000C7F12 /* BG.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B083F1C2BA896000C7F12 /* BG.png */; };
+		5E5B084D1C2BA896000C7F12 /* Cloud.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B08401C2BA896000C7F12 /* Cloud.png */; };
+		5E5B084E1C2BA896000C7F12 /* Location.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B08411C2BA896000C7F12 /* Location.png */; };
+		5E5B084F1C2BA896000C7F12 /* PartlyCloudy.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B08421C2BA896000C7F12 /* PartlyCloudy.png */; };
+		5E5B08501C2BA896000C7F12 /* Rain Chance.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B08431C2BA896000C7F12 /* Rain Chance.png */; };
+		5E5B08511C2BA896000C7F12 /* RainCloud.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B08441C2BA896000C7F12 /* RainCloud.png */; };
+		5E5B08521C2BA896000C7F12 /* Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B08451C2BA896000C7F12 /* Settings.png */; };
+		5E5B08531C2BA896000C7F12 /* Sun.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B08461C2BA896000C7F12 /* Sun.png */; };
+		5E5B08541C2BA896000C7F12 /* Sunny.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B08471C2BA896000C7F12 /* Sunny.png */; };
+		5E5B08551C2BA896000C7F12 /* Temp.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B08481C2BA896000C7F12 /* Temp.png */; };
+		5E5B08561C2BA896000C7F12 /* Weather Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B08491C2BA896000C7F12 /* Weather Placeholder.png */; };
+		5E5B08571C2BA896000C7F12 /* Wind Speed.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5B084A1C2BA896000C7F12 /* Wind Speed.png */; };
 		5EBBE80E1C2B97AA00E67D2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBBE80D1C2B97AA00E67D2F /* AppDelegate.swift */; };
 		5EBBE8101C2B97AA00E67D2F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBBE80F1C2B97AA00E67D2F /* ViewController.swift */; };
 		5EBBE8131C2B97AA00E67D2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EBBE8111C2B97AA00E67D2F /* Main.storyboard */; };
@@ -35,7 +47,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5E5B083B1C2BA686000C7F12 /* Weather App Design */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Weather App Design"; sourceTree = "<group>"; };
+		5E5B083E1C2BA896000C7F12 /* All with Sun Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "All with Sun Placeholder.png"; sourceTree = "<group>"; };
+		5E5B083F1C2BA896000C7F12 /* BG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BG.png; sourceTree = "<group>"; };
+		5E5B08401C2BA896000C7F12 /* Cloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cloud.png; sourceTree = "<group>"; };
+		5E5B08411C2BA896000C7F12 /* Location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Location.png; sourceTree = "<group>"; };
+		5E5B08421C2BA896000C7F12 /* PartlyCloudy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PartlyCloudy.png; sourceTree = "<group>"; };
+		5E5B08431C2BA896000C7F12 /* Rain Chance.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Rain Chance.png"; sourceTree = "<group>"; };
+		5E5B08441C2BA896000C7F12 /* RainCloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RainCloud.png; sourceTree = "<group>"; };
+		5E5B08451C2BA896000C7F12 /* Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings.png; sourceTree = "<group>"; };
+		5E5B08461C2BA896000C7F12 /* Sun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sun.png; sourceTree = "<group>"; };
+		5E5B08471C2BA896000C7F12 /* Sunny.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sunny.png; sourceTree = "<group>"; };
+		5E5B08481C2BA896000C7F12 /* Temp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Temp.png; sourceTree = "<group>"; };
+		5E5B08491C2BA896000C7F12 /* Weather Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Weather Placeholder.png"; sourceTree = "<group>"; };
+		5E5B084A1C2BA896000C7F12 /* Wind Speed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Wind Speed.png"; sourceTree = "<group>"; };
 		5EBBE80A1C2B97AA00E67D2F /* Weather App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Weather App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EBBE80D1C2B97AA00E67D2F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5EBBE80F1C2B97AA00E67D2F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -105,7 +129,19 @@
 				5EBBE8141C2B97AA00E67D2F /* Assets.xcassets */,
 				5EBBE8161C2B97AA00E67D2F /* LaunchScreen.storyboard */,
 				5EBBE8191C2B97AA00E67D2F /* Info.plist */,
-				5E5B083B1C2BA686000C7F12 /* Weather App Design */,
+				5E5B083E1C2BA896000C7F12 /* All with Sun Placeholder.png */,
+				5E5B083F1C2BA896000C7F12 /* BG.png */,
+				5E5B08401C2BA896000C7F12 /* Cloud.png */,
+				5E5B08411C2BA896000C7F12 /* Location.png */,
+				5E5B08421C2BA896000C7F12 /* PartlyCloudy.png */,
+				5E5B08431C2BA896000C7F12 /* Rain Chance.png */,
+				5E5B08441C2BA896000C7F12 /* RainCloud.png */,
+				5E5B08451C2BA896000C7F12 /* Settings.png */,
+				5E5B08461C2BA896000C7F12 /* Sun.png */,
+				5E5B08471C2BA896000C7F12 /* Sunny.png */,
+				5E5B08481C2BA896000C7F12 /* Temp.png */,
+				5E5B08491C2BA896000C7F12 /* Weather Placeholder.png */,
+				5E5B084A1C2BA896000C7F12 /* Wind Speed.png */,
 			);
 			path = "Weather App";
 			sourceTree = "<group>";
@@ -232,9 +268,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E5B083D1C2BA6D2000C7F12 /* Weather App Design in Resources */,
+				5E5B08531C2BA896000C7F12 /* Sun.png in Resources */,
+				5E5B084F1C2BA896000C7F12 /* PartlyCloudy.png in Resources */,
+				5E5B084C1C2BA896000C7F12 /* BG.png in Resources */,
+				5E5B08551C2BA896000C7F12 /* Temp.png in Resources */,
+				5E5B08571C2BA896000C7F12 /* Wind Speed.png in Resources */,
+				5E5B084D1C2BA896000C7F12 /* Cloud.png in Resources */,
 				5EBBE8181C2B97AA00E67D2F /* LaunchScreen.storyboard in Resources */,
+				5E5B08521C2BA896000C7F12 /* Settings.png in Resources */,
+				5E5B084B1C2BA896000C7F12 /* All with Sun Placeholder.png in Resources */,
+				5E5B08501C2BA896000C7F12 /* Rain Chance.png in Resources */,
+				5E5B08511C2BA896000C7F12 /* RainCloud.png in Resources */,
+				5E5B08541C2BA896000C7F12 /* Sunny.png in Resources */,
+				5E5B08561C2BA896000C7F12 /* Weather Placeholder.png in Resources */,
 				5EBBE8151C2B97AA00E67D2F /* Assets.xcassets in Resources */,
+				5E5B084E1C2BA896000C7F12 /* Location.png in Resources */,
 				5EBBE8131C2B97AA00E67D2F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
