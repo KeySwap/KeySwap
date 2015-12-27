@@ -13,7 +13,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var currentWeatherImage: UIImageView!
-
     @IBOutlet weak var tempLabel: UILabel!
     @IBOutlet weak var currentWeatherLabel: UILabel!
     @IBOutlet weak var rainChanceLabel: UILabel!
@@ -22,19 +21,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     var locationManager = CLLocationManager()
     
-    //var url = ""
-    
     var timesGone = 0
     
     var latitude: Double!
+    
+    var activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     
     //VALUES 
     
     var tempInt = 1116
     var windSpeed = 1116
     var precipChance = 1116
-    var locationTitle = "1116, USA"
-    var summary = "1116"
+    var locationTitle = "Loading..."
+    var summary = "Loading..."
     var icon = "1116"
     var iconImage = "1116.png"
     
@@ -42,7 +41,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         didSet {
             
-            while timesGone < 1 {
+            while timesGone < 2 {
             
                 print(url)
                 print("running json")
@@ -53,10 +52,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-   
-    
-
-
+    func alert(message: String) {
+        
+        let alert = UIAlertController(title: "Connection Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { (alert: UIAlertAction) -> Void in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }))
+        
+        self.presentViewController(alert, animated: true, completion: nil)
+        
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,14 +74,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         
-        
-        
-        
     }
 
     
+    override func viewDidAppear(animated: Bool) {
+        updateValues()
+
+    }
+    
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
+      
         
         let locValue: CLLocationCoordinate2D = (manager.location?.coordinate)!
         
@@ -85,11 +95,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         url = "https://api.forecast.io/forecast/73e98c14ffc7ff709531cb7b5c04289a/\(lat),\(long)"
         
+        print(url)
+        
         //ALCATRAZ URL - https://api.forecast.io/forecast/73e98c14ffc7ff709531cb7b5c04289a/37.8267,-122.423
         
         //FIND CITY
         
-        var location = CLLocation(latitude: lat, longitude: long)
+        let location = CLLocation(latitude: lat, longitude: long)
+        
+        updateValues()
         
         //print(location)
         
@@ -98,6 +112,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             if error != nil {
                 print("Reverse geocoder failed with error" + error!.localizedDescription)
+                
+                let timesErrored = 0
+                
+                while timesErrored < 1 {
+                    
+                    self.alert("Could not get a city/town from your current location")
+                }
+
+                
+                
+                
                 return
             }
             
@@ -106,15 +131,48 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 let city = pm.locality
                 let state = pm.administrativeArea
                 
-                self.locationTitle = "\(city!), \(state!)"
+                self.updateValues()
                 
+                print(city)
+                print(state)
+                
+                //if no city or state is found then display error
+                if state == nil || city == nil {
+                    
+
+                    self.locationTitle = "No state/province or city found"
+                    
+                    if state == nil && city != nil {
+                        
+                        self.locationTitle = "\(city), N/A"
+                        
+                    }
+                    
+                    if state != nil && city == nil {
+                        
+                        self.locationTitle = "N/A, \(state)"
+                        
+                    }
+
+                    
+                    
+                } else {
+                    
+                    self.locationTitle = "\(city!), \(state!)"
+                    self.updateValues()
+                    self.getJSON()
+
+                }
+                
+               
+                
+                self.updateValues()
                 
             }
             else {
                print("Problem with the data received from geocoder")
             }
         })
-        
         
 }
 
@@ -123,6 +181,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     func getJSON() {
         
         print(url)
+        
+        self.updateValues()
         
         let jsonURL = NSURL(string: url)
         print("JSONURL: \(jsonURL)")
@@ -182,6 +242,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 case "partly-cloudy-day" :
                     self.iconImage = "PartlyCloudy.png"
                     
+                case "partly-cloudy-night" :
+                    self.iconImage = "PartlyCloudyNight.png"
+                    
+                case "snow" :
+                    self.iconImage = "SnowCloud.png"
+                    
+                case "sleet" :
+                    self.iconImage = "Sleet.png"
+                    
+                case "wind" :
+                    self.iconImage = "Wind.png"
+                    
+                case "fog" :
+                    self.iconImage = "Fog.png"
+                
+                case "clear-night" :
+                    self.iconImage = "Moon.png"
+                    
                 default :
                     self.iconImage = "Sun.png"
                     
@@ -193,11 +271,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             } catch _ {
                 // Error
                 
-                print("error")
+                self.alert("Could not retrieve weather data")
+                
             }
         }
         
         task.resume()
+        
+        updateValues()
+        
         }
         
 
@@ -214,12 +296,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             self.currentWeatherLabel.text = self.summary
             self.currentWeatherImage.image = UIImage(named: self.iconImage)
             print(self.iconImage)
+            
+            
+            
         }
        
         
         
     }
 
+    //legally neccesary powered by forecast.io badge
+    @IBAction func forecastOpen(sender: AnyObject) {
+        
+        UIApplication.sharedApplication().openURL(NSURL(string: "http://www.forecast.io")!)
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
