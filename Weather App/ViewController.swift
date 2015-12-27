@@ -203,7 +203,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 
                 
                 //TEMP
-                let temp = currentJSON!["apparentTemperature"] as? Float
+                let temp = currentJSON!["temperature"] as? Float
                 self.tempInt = Int(temp!)
                 
                 if self.tempInt != 1116 {
