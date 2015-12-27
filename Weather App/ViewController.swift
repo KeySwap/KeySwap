@@ -220,7 +220,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 
                 var precipChanceDec = 0
                 precipChanceDec = (currentJSON!["precipProbability"] as? Int)!
-                self.precipChance = precipChanceDec * 2
+                self.precipChance = precipChanceDec * 100
                 print("Rain Chance \(self.precipChance)")
 
                 
