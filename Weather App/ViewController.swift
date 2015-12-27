@@ -23,6 +23,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     var timesGone = 0
     
+    var timesGoneLoc = 0
+    
     var latitude: Double!
     
     var activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
@@ -41,7 +43,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         didSet {
             
-            while timesGone < 2 {
+            while timesGone < 1 {
             
                 print(url)
                 print("running json")
@@ -50,6 +52,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 timesGone++
             }
         }
+    }
+    
+    func spinner() {
+        
+        
+        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, 150, 150))
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        //UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+
+        
     }
     
     func alert(message: String) {
@@ -74,106 +90,115 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         
+        spinner()
+        
     }
 
     
     override func viewDidAppear(animated: Bool) {
         updateValues()
+        
+        spinner()
 
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-      
+      print("getting location")
         
-        let locValue: CLLocationCoordinate2D = (manager.location?.coordinate)!
+        while timesGoneLoc < 1 {
         
-        let lat = locValue.latitude
-        let long = locValue.longitude
+            let locValue: CLLocationCoordinate2D = (manager.location?.coordinate)!
         
-        latitude = locValue.latitude
+            let lat = locValue.latitude
+            let long = locValue.longitude
         
-        url = "https://api.forecast.io/forecast/73e98c14ffc7ff709531cb7b5c04289a/\(lat),\(long)"
+            latitude = locValue.latitude
         
-        print(url)
+            url = "https://api.forecast.io/forecast/73e98c14ffc7ff709531cb7b5c04289a/\(lat),\(long)"
         
-        //ALCATRAZ URL - https://api.forecast.io/forecast/73e98c14ffc7ff709531cb7b5c04289a/37.8267,-122.423
+            print(url)
         
-        //FIND CITY
+            //ALCATRAZ URL - https://api.forecast.io/forecast/73e98c14ffc7ff709531cb7b5c04289a/37.8267,-122.423
         
-        let location = CLLocation(latitude: lat, longitude: long)
+            //FIND CITY
         
-        updateValues()
+            let location = CLLocation(latitude: lat, longitude: long)
         
-        //print(location)
+            updateValues()
         
-        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
             //print(location)
+        
+            CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
+                //print(location)
             
-            if error != nil {
-                print("Reverse geocoder failed with error" + error!.localizedDescription)
+                if error != nil {
+                    print("Reverse geocoder failed with error" + error!.localizedDescription)
                 
-                let timesErrored = 0
+                    let timesErrored = 0
                 
-                while timesErrored < 1 {
+                    while timesErrored < 1 {
                     
-                    self.alert("Could not get a city/town from your current location")
+                        self.alert("Could not get a city/town from your current location")
+                    }
+
+                
+                
+                
+                    //return
                 }
-
-                
-                
-                
-                return
-            }
             
-            if placemarks!.count > 0 {
-                let pm = placemarks![0]
-                let city = pm.locality
-                let state = pm.administrativeArea
+                if placemarks!.count > 0 {
+                    let pm = placemarks![0]
+                    let city = pm.locality
+                    let state = pm.administrativeArea
                 
-                self.updateValues()
-                
-                print(city)
-                print(state)
-                
-                //if no city or state is found then display error
-                if state == nil || city == nil {
-                    
-
-                    self.locationTitle = "No state/province or city found"
-                    
-                    if state == nil && city != nil {
-                        
-                        self.locationTitle = "\(city), N/A"
-                        
-                    }
-                    
-                    if state != nil && city == nil {
-                        
-                        self.locationTitle = "N/A, \(state)"
-                        
-                    }
-
-                    
-                    
-                } else {
-                    
-                    self.locationTitle = "\(city!), \(state!)"
                     self.updateValues()
-                    self.getJSON()
+                
+                    print(city)
+                    print(state)
+                
+                    //if no city or state is found then display error
+                    if state == nil || city == nil {
+                    
 
-                }
+                        self.locationTitle = "No state/province or city found"
+                    
+                        if state == nil && city != nil {
+                        
+                            self.locationTitle = "\(city), N/A"
+                        
+                        }
+                    
+                        if state != nil && city == nil {
+                        
+                            self.locationTitle = "N/A, \(state)"
+                        
+                        }
+
+                    
+                    
+                    } else {
+                    
+                        self.locationTitle = "\(city!), \(state!)"
+                        self.updateValues()
+                        self.getJSON()
+
+                    }
                 
                
                 
-                self.updateValues()
+                    self.updateValues()
                 
-            }
-            else {
-               print("Problem with the data received from geocoder")
-            }
-        })
-        
+                }
+                else {
+                print("Problem with the data received from geocoder")
+                }
+            })
+            
+            timesGoneLoc++
+            
+        }
 }
 
     
@@ -218,9 +243,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 
                 //RAIN CHANCE
                 
-                var precipChanceDec = 0
-                precipChanceDec = (currentJSON!["precipProbability"] as? Int)!
-                self.precipChance = precipChanceDec * 100
+                var precipChanceDec: Float!
+                var precipChanceNoDec: Float!
+                precipChanceDec = (currentJSON!["precipProbability"] as? Float)!
+                precipChanceNoDec = precipChanceDec * 100
+                self.precipChance = Int(precipChanceNoDec)
                 print("Rain Chance \(self.precipChance)")
 
                 
@@ -290,6 +317,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     func updateValues() {
         
+      
         print("updating")
         dispatch_async(dispatch_get_main_queue()) {
             self.tempLabel.text = "\(self.tempInt)°"
@@ -302,9 +330,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             
             
+            //UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            
         }
        
-        
+        self.activityIndicator.stopAnimating()
         
     }
 
