@@ -31,7 +31,7 @@ var logger = new (Winston.Logger)({
             new (Winston.transports.File)({
                 level: 'info',
                 timestamp: true,
-                filename: 'debug.log',
+                filename: 'logs/debug.log',
                 json: false
             })
         ]
