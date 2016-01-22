@@ -31,7 +31,7 @@ var logger = new (Winston.Logger)({
             new (Winston.transports.File)({
                 level: 'info',
                 timestamp: true,
-                filename: 'cratedump.log',
+                filename: 'debug.log',
                 json: false
             })
         ]
@@ -68,7 +68,7 @@ client.on('error', function (e) {
 client.on('webSession', function (sessionID, cookies) {
     logger.debug("Got web session");
     // Set our status to "Online" (otherwise we always appear offline)
-    client.friends.setPersonaState(SteamUser.Steam.EPersonaState.Online);
+    client.setPersona(SteamUser.Steam.EPersonaState.Online);
     offers.setCookies(cookies, function (err){
         if (err) {
             logger.error('Unable to set trade offer cookies: '+err);
