@@ -1,6 +1,7 @@
 var Winston           = require('winston'); // For logging
 var SteamUser         = require('steam-user'); // The heart of the bot.  We'll write the soul ourselves.
 var TradeOfferManager = require('steam-tradeoffer-manager'); // Only required if you're using trade offers
+var SteamTotp         = require('steam-totp');
 var config            = require('./config.js');
 var fs                = require('fs'); // For writing a dope-ass file for TradeOfferManager
 
@@ -46,6 +47,7 @@ var offers = new TradeOfferManager({
     pollInterval: 10000, // (Poll every 10 seconds (10,000 ms)
     cancelTime:   300000 // Expire any outgoing trade offers that have been up for 5+ minutes (300,000 ms)
 });
+
 // Sign into Steam∏
 client.logOn({
     accountName: config.username,
@@ -112,8 +114,12 @@ client.on('friendRelationship', function (sid, relationship) {
   }
 });
 client.on('friendMessage', function (senderID, message) {
-  logger.info('Sent ' + senderID + ' the greeting message.');
-  client.chatMessage(senderID, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.");
+  if (message.match(/^!trade/i)){
+    trade(senderID)
+  } else{
+    logger.info('Sent ' + senderID + ' the greeting message.');
+    client.chatMessage(senderID, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.");
+  }
   //Possible anti-spam system, doesn't work
   //senderID.sentCount++;
   //if (senderID.sentCount < 3) {
@@ -123,4 +129,9 @@ client.on('friendMessage', function (senderID, message) {
   //else if (senderID.sentCount > 3) {
     //client.chatMessage(senderID, "M'aiq is done talking.")
   //}
+});
+client.on('friendTyping', function (senderID){
+  client.chatMessage(senderID, "HEY FRIEND")
+  client.chatMessage(senderID, "I SEE YOU TYPING")
+  client.chatMessage(senderID, "WHAT'S UP?!?")
 });
