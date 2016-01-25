@@ -19,7 +19,7 @@ var contextid = {
     DOTA2: 2,
     CSGO:  2,
     Steam: 6
-}
+};
 
 // Setup logging to file and console
 var logger = new (Winston.Logger)({
@@ -91,7 +91,7 @@ client.on('emailInfo', function (address, validated) {
 });
 
 client.on('accountLimitations', function(limited) {
-  logger.error("Our account is limited. Please fix this as soon as possible.")
+  logger.error("Our account is limited. Please fix this as soon as possible.");
 });
 
 // Emitted on login and when wallet balance changes
@@ -108,12 +108,12 @@ client.on('friend', function (steamID, relationship) {
   if (relationship == SteamUser.Steam.EFriendRelationship.RequestRecipient) {
     logger.info('[' + steamID +'] Accepted friend request.');
     client.addFriend(steamID);
-    client.chatMessage(steamID, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.")
+    client.chatMessage(steamID, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.");
   }
 });
 client.on('friendMessage', function (senderID, message) {
-  logger.info('Sent ' + senderID + ' the greeting message.')
-  client.chatMessage(senderID, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.")
+  logger.info('Sent ' + senderID + ' the greeting message.');
+  client.chatMessage(senderID, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.");
   //Possible anti-spam system, doesn't work
   //senderID.sentCount++;
   //if (senderID.sentCount < 3) {
