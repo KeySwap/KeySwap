@@ -72,7 +72,7 @@ client.on('webSession', function (sessionID, cookies) {
     offers.setCookies(cookies, function (err){
         if (err) {
             logger.error('Unable to set trade offer cookies: '+err);
-            process.exit(1); // No point in staying up if we can't use trade offers
+            //process.exit(1); // No point in staying up if we can't use trade offers
         }
         logger.debug("Trade offer cookies set.  Got API Key: "+offers.apiKey);
     });
@@ -90,6 +90,10 @@ client.on('emailInfo', function (address, validated) {
     logger.info("Our email address is " + address + " and it's " + (validated ? "validated" : "not validated"));
 });
 
+client.on('accountLimitations', function(limited) {
+  logger.error("Our account is limited. Please fix this as soon as possible.")
+});
+
 // Emitted on login and when wallet balance changes
 // Not important in our case, but kind of neat.
 client.on('wallet', function (hasWallet, currency, balance) {
@@ -98,4 +102,25 @@ client.on('wallet', function (hasWallet, currency, balance) {
     } else {
         logger.info("We do not have a Steam wallet.");
     }
+});
+
+client.on('friend', function (steamID, relationship) {
+  if (relationship == SteamUser.Steam.EFriendRelationship.RequestRecipient) {
+    logger.info('[' + steamID +'] Accepted friend request.');
+    client.addFriend(steamID);
+    client.chatMessage(steamID, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.")
+  }
+});
+client.on('friendMessage', function (senderID, message) {
+  logger.info('Sent ' + senderID + ' the greeting message.')
+  client.chatMessage(senderID, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.")
+  //Possible anti-spam system, doesn't work
+  //senderID.sentCount++;
+  //if (senderID.sentCount < 3) {
+    //logger.info('Sent ' + senderID + ' the greeting message.')
+    //client.chatMessage(senderID, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.")
+  //}
+  //else if (senderID.sentCount > 3) {
+    //client.chatMessage(senderID, "M'aiq is done talking.")
+  //}
 });
