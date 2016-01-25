@@ -104,11 +104,11 @@ client.on('wallet', function (hasWallet, currency, balance) {
     }
 });
 
-client.on('friend', function (steamID, relationship) {
+client.on('friendRelationship', function (sid, relationship) {
   if (relationship == SteamUser.Steam.EFriendRelationship.RequestRecipient) {
-    logger.info('[' + steamID +'] Accepted friend request.');
-    client.addFriend(steamID);
-    client.chatMessage(steamID, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.");
+    logger.info('[' + sid +'] Accepted friend request.');
+    client.addFriend(sid);
+    client.chatMessage(sid, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.");
   }
 });
 client.on('friendMessage', function (senderID, message) {
