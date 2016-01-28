@@ -22,6 +22,8 @@ var contextid = {
     Steam: 6
 };
 
+var itemids = {}
+
 // Setup logging to file and console
 var logger = new (Winston.Logger)({
         transports: [
@@ -48,6 +50,8 @@ var offers = new TradeOfferManager({
     cancelTime:   300000 // Expire any outgoing trade offers that have been up for 5+ minutes (300,000 ms)
 });
 
+logger.info("Initialized!")
+
 // Sign into Steam∏
 client.logOn({
     accountName: config.username,
@@ -55,7 +59,7 @@ client.logOn({
 });
 
 client.on('loggedOn', function (details) {
-    logger.info("Logged into Steam as " + client.steamID.getSteam3RenderedID());
+    logger.info("Logged into Steam as " + client.steamID.getSteam3RenderedID() + ". Good morning, sunshine.");
     // If you wanted to go in-game after logging in (for crafting or whatever), you can do the following
     // client.gamesPlayed(appid.TF2);
 });
@@ -78,6 +82,11 @@ client.on('webSession', function (sessionID, cookies) {
         }
         logger.debug("Trade offer cookies set.  Got API Key: "+offers.apiKey);
     });
+});
+
+client.on('tradeOffers', function(count){
+  if(count < 5){logger.info("Found " + count + "new offers.")}
+  if(count > 5){logger.warn("Found " + count + "new offers. Get on it!")}
 });
 
 // Emitted when Steam sends a notification of new items.
@@ -110,15 +119,19 @@ client.on('friendRelationship', function (sid, relationship) {
   if (relationship == SteamUser.Steam.EFriendRelationship.RequestRecipient) {
     logger.info('[' + sid +'] Accepted friend request.');
     client.addFriend(sid);
-    client.chatMessage(sid, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.");
+    client.chatMessage(sid, config.greetMsg);
   }
 });
 client.on('friendMessage', function (senderID, message) {
-  if (message.match(/^!trade/i)){
-    trade(senderID)
+  if (message.match(/^!trade (\d+) (\d+)/i)){
+    var req = [];
+    var theirkey = req[1];
+    var ourkey = req[2];
+    logger.info('Sent ' + senderID + ' a trade offer.')
+    client.trade(senderID);
   } else{
     logger.info('Sent ' + senderID + ' the greeting message.');
-    client.chatMessage(senderID, "Hey! I'm a key trading bot. I will convert your keys at the cost of one scrap.");
+    client.chatMessage(senderID, config.greetMsg);
   }
   //Possible anti-spam system, doesn't work
   //senderID.sentCount++;
@@ -130,8 +143,13 @@ client.on('friendMessage', function (senderID, message) {
     //client.chatMessage(senderID, "M'aiq is done talking.")
   //}
 });
-client.on('friendTyping', function (senderID){
-  client.chatMessage(senderID, "HEY FRIEND")
-  client.chatMessage(senderID, "I SEE YOU TYPING")
-  client.chatMessage(senderID, "WHAT'S UP?!?")
+offers.on('newOffer', function(offer) {
+  logger.info("New offer #" + offer.id + " from " + offer.partner.getSteam3RenderedID);
+  offer.accept(function(err){
+    if(err) {
+      logger.error("Error with trade offer. Bad stuff has happened.");
+    } else{
+      logger.info("Offer accepted.")
+    }
+  })
 });
