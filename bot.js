@@ -2,6 +2,7 @@ var Winston           = require('winston'); // For logging
 var SteamUser         = require('steam-user'); // The heart of the bot.  We'll write the soul ourselves.
 var TradeOfferManager = require('steam-tradeoffer-manager'); // Only required if you're using trade offers
 var SteamTotp         = require('steam-totp');
+var SteamCommunity    = require('steamcommunity');
 var config            = require('./config.js');
 var fs                = require('fs'); // For writing a dope-ass file for TradeOfferManager
 
@@ -42,7 +43,8 @@ var logger = new (Winston.Logger)({
 
 // Initialize the Steam client and our trading library
 var client = new SteamUser();
-var offers = new TradeOfferManager({
+var community = new SteamCommunity();
+var manager = new TradeOfferManager({
     steam:        client,
     domain:       config.domain,
     language:     "en", // English item descriptions
@@ -52,7 +54,7 @@ var offers = new TradeOfferManager({
 
 logger.info("Initialized!")
 
-// Sign into Steam∏
+// Sign into Steam
 client.logOn({
     accountName: config.username,
     password: config.password
@@ -75,12 +77,12 @@ client.on('webSession', function (sessionID, cookies) {
     logger.debug("Got web session");
     // Set our status to "Online" (otherwise we always appear offline)
     client.setPersona(SteamUser.Steam.EPersonaState.Online);
-    offers.setCookies(cookies, function (err){
+    manager.setCookies(cookies, function (err){
         if (err) {
             logger.error('Unable to set trade offer cookies: '+err);
             //process.exit(1); // No point in staying up if we can't use trade offers
         }
-        logger.debug("Trade offer cookies set.  Got API Key: "+offers.apiKey);
+        logger.debug("Trade offer cookies set.  Got API Key: "+ manager.apiKey);
     });
 });
 
@@ -143,7 +145,7 @@ client.on('friendMessage', function (senderID, message) {
     //client.chatMessage(senderID, "M'aiq is done talking.")
   //}
 });
-offers.on('newOffer', function(offer) {
+manager.on('newOffer', function(offer) {
   logger.info("New offer #" + offer.id + " from " + offer.partner.getSteam3RenderedID);
   offer.accept(function(err){
     if(err) {
