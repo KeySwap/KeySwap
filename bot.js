@@ -3,6 +3,7 @@ var SteamUser         = require('steam-user'); // The heart of the bot.  We'll w
 var TradeOfferManager = require('steam-tradeoffer-manager'); // Only required if you're using trade offers
 var SteamTotp         = require('steam-totp');
 var SteamCommunity    = require('steamcommunity');
+var SocketIO          = require('socket.io');
 var config            = require('./config.js');
 var fs                = require('fs'); // For writing a dope-ass file for TradeOfferManager
 
@@ -62,6 +63,7 @@ client.logOn({
 
 client.on('loggedOn', function (details) {
     logger.info("Logged into Steam as " + client.steamID.getSteam3RenderedID() + ". Good morning, sunshine.");
+    client.setPersona(SteamUser.Steam.EPersonaState.Busy);
     // If you wanted to go in-game after logging in (for crafting or whatever), you can do the following
     // client.gamesPlayed(appid.TF2);
 });
