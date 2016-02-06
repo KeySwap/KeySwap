@@ -24,7 +24,13 @@ var contextid = {
     Steam: 6
 };
 
-var itemids = {}
+var itemid = {
+    StockKey:      1,
+    GMKey:         2,
+    GMCosmeticKey: 3,
+    TBKey:         4,
+    TBCosmeticKey: 5
+};
 
 // Setup logging to file and console
 var logger = new (Winston.Logger)({
@@ -105,8 +111,29 @@ client.on('emailInfo', function (address, validated) {
     logger.info("Our email address is " + address + " and it's " + (validated ? "validated" : "not validated"));
 });
 
-client.on('accountLimitations', function(limited) {
-  logger.error("Our account is limited. Please fix this as soon as possible.");
+client.on('accountLimitations', function (limited, communityBanned, locked, canInviteFriends) {
+    if (limited) {
+        // More info: https://support.steampowered.com/kb_article.php?ref=3330-IAGK-7663
+        logger.warn("Our account is limited. We cannot send friend invites, use the market, open group chat, or access the web API.");
+    }
+    if (communityBanned){
+        // More info: https://support.steampowered.com/kb_article.php?ref=4312-UOJL-0835
+        // http://forums.steampowered.com/forums/showpost.php?p=17054612&postcount=3
+        logger.warn("Our account is banned from Steam Community");
+        // I don't know if this alone means you can't trade or not.
+    }
+    if (locked){
+        // Either self-locked or locked by a Valve employee: http://forums.steampowered.com/forums/showpost.php?p=17054612&postcount=3
+        logger.error("Our account is locked. We cannot trade/gift/purchase items, play on VAC servers, or access Steam Community.  Shutting down.");
+        process.exit(1);
+    }
+    if (!canInviteFriends){
+        // This could be important if you need to add users.  In our case, they add us or just use a direct tradeoffer link.
+        logger.warn("Our account is unable to send friend requests.");
+    }
+    if (canInviteFriends && !locked && !communityBanned && !limited){
+      logger.info("Our account is a-OK. No bans or limitations.")
+    }
 });
 
 // Emitted on login and when wallet balance changes
@@ -127,12 +154,13 @@ client.on('friendRelationship', function (sid, relationship) {
   }
 });
 client.on('friendMessage', function (senderID, message) {
-  if (message.match(/^!trade (\d+) (\d+)/i)){
-    var req = [];
+  var req;
+  if (req = message.match(/^!trade (\d+) (\d+)/i)){
     var theirkey = req[1];
     var ourkey = req[2];
-    logger.info('Sent ' + senderID + ' a trade offer.')
+    client.chatMessage(senderID, "Sending an offer...")
     client.trade(senderID);
+    logger.info('Sent ' + senderID + ' a trade offer.')
   } else{
     logger.info('Sent ' + senderID + ' the greeting message.');
     client.chatMessage(senderID, config.greetMsg);
